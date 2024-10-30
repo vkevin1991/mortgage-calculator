@@ -1,17 +1,21 @@
 import { Router, Request, Response } from "express";
-import {
-  AmortizationScheduleResponse,
-  MortgageRequestBody,
-  MortgageResponse,
-  RemainingBalanceBody,
-  RemainingBalanceResponse,
-} from "./mortgage.dto";
 import mortgageService from "../services/mortgage.service";
 import { FREQUENCY_MAP } from "../interfaces/frequency.dto";
+import { validateDto } from "../middlewares/validation.middleware";
+import { ErrorResponse } from "../middlewares/validation.dto";
+import { MortgageRequestBody } from "./dto/mortgageRequestBody.dto";
+import { RemainingBalanceBody } from "./dto/remainingBalanceRequestBody.dto";
+import { AmortizationScheduleResponse } from "./dto/amortizationScheduleResponse.dto";
 
 const router = Router();
 
-router.post("/calculate", (req: Request, res: Response<MortgageResponse>) => {
+router.post("/calculate", async (req: Request, res: Response): Promise<any> => {
+  const validationData = await validateDto(req, res, MortgageRequestBody);
+  if (validationData?.errors) {
+    return res.status(400).json({
+      ...validationData,
+    });
+  }
   const {
     propertyPrice,
     downPayment,
@@ -32,7 +36,13 @@ router.post("/calculate", (req: Request, res: Response<MortgageResponse>) => {
 
 router.post(
   "/remaining-balance",
-  (req: Request, res: Response<RemainingBalanceResponse>) => {
+  async (req: Request, res: Response): Promise<any> => {
+    const validationData = await validateDto(req, res, RemainingBalanceBody);
+    if (validationData?.errors) {
+      return res.status(400).json({
+        ...validationData,
+      });
+    }
     const {
       propertyPrice,
       downPayment,
@@ -67,7 +77,16 @@ router.post(
 
 router.post(
   "/amortization-schedule",
-  (req: Request, res: Response<AmortizationScheduleResponse>) => {
+  async (
+    req: Request,
+    res: Response<AmortizationScheduleResponse | ErrorResponse>
+  ): Promise<any> => {
+    const validationData = await validateDto(req, res, MortgageRequestBody);
+    if (validationData?.errors) {
+      return res.status(400).json({
+        ...validationData,
+      });
+    }
     const {
       propertyPrice,
       downPayment,
