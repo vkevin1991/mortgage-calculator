@@ -1,0 +1,19 @@
+{
+  "name": "mortage-calculator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "server:dev": "npm run start:dev --prefix server",
+    "client:dev": "npm run dev --prefix client",
+    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "build": "concurrently \"npm run build --prefix client\"  \"npm run build --prefix server\"",
+    "start": "NODE_ENV=production node server/dist/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
