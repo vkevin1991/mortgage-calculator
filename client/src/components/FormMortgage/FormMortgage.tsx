@@ -6,6 +6,7 @@ import {
   MortgageInputFields,
 } from "./FormMortgage.interface";
 
+const API_URL = import.meta.env.VITE_API_URL;
 export default function FormMortgage({ onCalculate }: FormMortgageProps) {
   const [inputFields, setInputFields] = useState<MortgageInputFields>({
     propertyPrice: "",
@@ -104,7 +105,7 @@ export default function FormMortgage({ onCalculate }: FormMortgageProps) {
       years: Number(inputFields.years),
       paymentSchedule: inputFields.paymentSchedule,
     };
-    const data = await fetch("http://localhost:3000/api/mortgage/calculate", {
+    const data = await fetch(`${API_URL}/api/mortgage/calculate`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -113,7 +114,7 @@ export default function FormMortgage({ onCalculate }: FormMortgageProps) {
     });
     const monthlyPayment = await data.json();
     const amortizationData = await fetch(
-      "http://localhost:3000/api/mortgage/amortization-schedule",
+      `${API_URL}/api/mortgage/amortization-schedule`,
       {
         method: "POST",
         headers: {
