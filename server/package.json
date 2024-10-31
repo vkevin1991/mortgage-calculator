@@ -6,7 +6,7 @@
   "scripts": {
     "start:dev": "npx nodemon",
     "start": "node dist/server.js",
-    "build": "rimraf dist && npx tsc",
+    "build": "npx rimraf dist && npx tsc",
     "test": "jest --config ./jest.config.json",
     "test:coverage": "jest --coverage --config ./jest.config.json"
   },
